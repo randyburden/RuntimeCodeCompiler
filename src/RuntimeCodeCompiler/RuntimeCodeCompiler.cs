@@ -33,7 +33,20 @@ namespace RuntimeCodeCompiler
             AppDomain.CurrentDomain.AssemblyResolve += ( sender, e ) =>
             {
                 Assembly assembly = null;
+                
                 Assemblies.TryGetValue( e.Name, out assembly );
+
+                if ( assembly == null )
+                {
+                    foreach ( var a in Assemblies )
+                    {
+                        if ( a.Key.StartsWith( e.Name ) )
+                        {
+                            return a.Value;
+                        }
+                    }
+                }
+
                 return assembly;
             };
         }
